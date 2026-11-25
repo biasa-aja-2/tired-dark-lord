@@ -10,6 +10,9 @@ import os
 import sys
 import unicodedata
 
+WORD_COUNT = 100  # the bounty rule: a monologue of about 100 words.
+CHAR_MIN, CHAR_MAX = 1, 600  # the sealed gate's character bounds.
+
 TEXT = (
     "You stand before me, hero, sword drawn, prophecy under your arm "
     "like a lunchbox. Good. Sit down. No, not the throne. The stool. "
@@ -27,14 +30,17 @@ def gate(text):
     """Mirror of the sealed gate: UTF-8 text, 1-600 characters, not
     only whitespace, no leading/trailing whitespace, no control or
     invisible format characters — and the bounty rule the judge
-    weighs: exactly 100 words, the tiredness felt in the voice
-    rather than announced, so the monologue spends every word on
-    scheme, history and deflection instead of saying it is weary."""
+    weighs: exactly 100 words (WORD_COUNT), the tiredness felt in
+    the voice rather than announced, so the monologue spends every
+    word on scheme, history and deflection instead of saying it is
+    weary. A text outside 1-600 chars never reaches the judge, and
+    a text far from 100 words loses to any monologue on the subject,
+    so both bounds are checked here before anything is written."""
     if not isinstance(text, str):
         return False
-    if not 1 <= len(text) <= 600:
+    if not CHAR_MIN <= len(text) <= CHAR_MAX:
         return False
-    if len(text.split()) != 100:
+    if len(text.split()) != WORD_COUNT:
         return False
     if text.strip() == "":
         return False
